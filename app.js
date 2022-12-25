@@ -7,7 +7,9 @@ const app = Vue.createApp({
     return {
       playerHealth: 100,
       monsterHealth: 100,
-      currentRound: 0
+      currentRound: 0,
+      //a null value is falsey
+      winner: null
     };
   },
   //to add inline styling dynamically
@@ -20,6 +22,22 @@ const app = Vue.createApp({
     },
     useSpecialAttack() {
       return this.currentRound % 3 !== 0;
+    }
+  },
+  watch: {
+    playerHealth(value) {
+      if (value <= 0 && this.monsterHealth <= 0) {
+        this.winner = 'draw';
+      } else if (value <= 0) {
+        this.winner = 'monster';
+      }
+    },
+    monsterHealth(value) {
+      if (value <= 0 && this.playerHealth <= 0) {
+        this.winner = 'draw';
+      } else if (value <= 0) {
+        this.winner = 'player';
+      }
     }
   },
   methods: {
