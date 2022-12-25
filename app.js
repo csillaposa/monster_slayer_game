@@ -42,6 +42,19 @@ const app = Vue.createApp({
       const attackValue = getRandomValue(25, 10);
       this.monsterHealth -= attackValue;
       this.attackPlayer();
+    },
+    //cannot get health more than 100
+    //healing counts as a round
+    //when the player heals, the monster attacks
+    healPlayer() {
+      this.currentRound++;
+      const healValue = getRandomValue(20, 8);
+      if (this.playerHealth + healValue > 100) {
+        this.playerHealth = 100;
+      } else {
+        this.playerHealth += healValue;
+      }
+      this.attackPlayer();
     }
   }
 });
