@@ -9,7 +9,8 @@ const app = Vue.createApp({
       monsterHealth: 100,
       currentRound: 0,
       //a null value is falsey
-      winner: null
+      winner: null,
+      logMessages: []
     };
   },
   //to add inline styling dynamically
@@ -53,6 +54,7 @@ const app = Vue.createApp({
       this.monsterHealth = 100;
       this.winner = null;
       this.currentRound = 0;
+      this.logMessages = [];
     },
     //to attack the monster with random damage
     //in return the monster attacks the player with random damage
@@ -60,11 +62,13 @@ const app = Vue.createApp({
       this.currentRound++;
       const attackValue = getRandomValue(12, 5);
       this.monsterHealth  -= attackValue;
+      this.addLogMessage('player', 'attack', attackValue);
       this.attackPlayer();
     },
     attackPlayer() {
       const attackValue = getRandomValue(15, 8);
       this.playerHealth -= attackValue;
+      this.addLogMessage('monster', 'attack', attackValue);
     },
     //deals more damage, but should be available only in every third round
     //the monster should be able to attack back
@@ -72,6 +76,7 @@ const app = Vue.createApp({
       this.currentRound++;
       const attackValue = getRandomValue(25, 10);
       this.monsterHealth -= attackValue;
+      this.addLogMessage('player', 'special-attack', attackValue);
       this.attackPlayer();
     },
     //cannot get health more than 100
@@ -85,10 +90,18 @@ const app = Vue.createApp({
       } else {
         this.playerHealth += healValue;
       }
+      this.addLogMessage('player', 'heal', healValue);
       this.attackPlayer();
     },
     surrender() {
       this.winner = 'monster';
+    },
+    addLogMessage(who, what, value) {
+      this.logMessages.unshift({
+        actionBy: who,
+        actionType: what,
+        actionValue: value
+      })
     }
   }
 });
