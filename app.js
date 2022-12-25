@@ -15,9 +15,15 @@ const app = Vue.createApp({
   //to add inline styling dynamically
   computed: {
     monsterBarStyle() {
+      if (this.monsterHealth < 0) {
+        return {width: '0%'};
+      }
       return {width: this.monsterHealth + '%'};
     },
     playerBarStyle() {
+      if (this.playerHealth < 0) {
+        return {width: '0%'}
+      }
       return {width: this.playerHealth + '%'};
     },
     useSpecialAttack() {
@@ -41,6 +47,13 @@ const app = Vue.createApp({
     }
   },
   methods: {
+    //to reset all parameters
+    startGame() {
+      this.playerHealth = 100;
+      this.monsterHealth = 100;
+      this.winner = null;
+      this.currentRound = 0;
+    },
     //to attack the monster with random damage
     //in return the monster attacks the player with random damage
     attackMonster() {
@@ -73,6 +86,9 @@ const app = Vue.createApp({
         this.playerHealth += healValue;
       }
       this.attackPlayer();
+    },
+    surrender() {
+      this.winner = 'monster';
     }
   }
 });
